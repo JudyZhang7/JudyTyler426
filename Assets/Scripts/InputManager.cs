@@ -5,7 +5,9 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public GameObject hand;
+    public GameObject orb;
     private bool isPunching = false;
+    float orbTimer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +28,6 @@ public class InputManager : MonoBehaviour
         //if (inputPos.x < -10) inputPos.x = -10;
         Camera.main.transform.LookAt(inputPos - Camera.main.transform.position);
         hand.transform.LookAt(inputPos - Camera.main.transform.position + hand.transform.position);
-        Debug.DrawLine(transform.position, hand.transform.forward * 5 + transform.position, Color.red);
     }
 
     IEnumerator PunchAnim()
@@ -52,19 +53,49 @@ public class InputManager : MonoBehaviour
         hand.GetComponent<MeshRenderer>().enabled = false;
         isPunching = false;
     }
+
+    RaycastHit CheckEnemies()
+    {
+        RaycastHit res;
+        Physics.SphereCast(hand.transform.position, 1, hand.transform.forward, out res, 5);
+        return res;
+    }
+
     void Punch()
     {
-        //Scan for enemies
+        //Scan for enemies; current max distance is 7
+        RaycastHit hitData = CheckEnemies();
+        if (hitData.collider != null)
+        {
+            Destroy(hitData.collider.gameObject);
+            Debug.Log(hitData.collider.gameObject.name);
+        }
+        
         //Move the hand
         hand.GetComponent<MeshRenderer>().enabled = true;
         StartCoroutine(PunchAnim());
     }
 
+    void Scare()
+    {
+        orb.SetActive(true);
+        orbTimer = 2.0f;
+        foreach(ParticleSystem particle in orb.GetComponentsInChildren<ParticleSystem>())
+        {
+            particle.time = 2;
+        }
+        RaycastHit hitData = CheckEnemies();
+        if (hitData.collider != null)
+        {
+            Destroy(hitData.collider.gameObject);
+            Debug.Log(hitData.collider.gameObject.name);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
         MoveCamera();
-
+        Debug.DrawLine(hand.transform.position, hand.transform.forward * 5 +  hand.transform.position, Color.red);
         if(Input.GetKeyDown(KeyCode.A) && Input.GetKeyDown(KeyCode.D))
         {
             Debug.Log("killing people is bad");
@@ -73,7 +104,9 @@ public class InputManager : MonoBehaviour
             Punch();
         } else if (Input.GetKeyDown(KeyCode.A))
         {
-
+            Scare();
         }
+        if (orbTimer > 0) orbTimer -= Time.deltaTime;
+        else orb.SetActive(false);
     }
 }
