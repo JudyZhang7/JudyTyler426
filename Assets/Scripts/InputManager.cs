@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
     public AudioSource scare;
     public AudioSource shriek;
     public AudioSource grunt;
-
+    private int magnitude = 2500;
     public float dangerMaxTime = 3.5f;
     private float dangerTime;
     public Light backgroundLight;
@@ -87,21 +87,21 @@ public class InputManager : MonoBehaviour
         // if collider is sphere, destroy
         if (hitData.collider != null)
         {
-            hitData.collider.enabled = false;
+            // hitData.collider.enabled = false;
             if (hitData.collider.gameObject.tag.Equals("BODY")) {
                 // bounce back
                 GameObject enemy = hitData.collider.gameObject;
-                var magnitude = 1500;
                 var force = enemy.transform.position - transform.position;
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
+                enemy.transform.localScale -= new Vector3(1, 1, 1);
                 numSpared += 1;
-                grunt.Play();
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 Destroy(hitData.collider.gameObject);
                 GetComponent<AudioSource>().Play();
+                shriek.Play();
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             }
         }
@@ -119,21 +119,21 @@ public class InputManager : MonoBehaviour
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
         {
-            hitData.collider.enabled = false;
+            // hitData.collider.enabled = false;
             if (hitData.collider.gameObject.tag.Equals("HEART")) {
                 // bounce back
                 GameObject enemy = hitData.collider.gameObject;
-                var magnitude = 1500;
                 var force = enemy.transform.position - transform.position;
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
-                shriek.Play();
+                enemy.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
                 numSpared += 1;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 Destroy(hitData.collider.gameObject);
                 GetComponent<AudioSource>().Play();
+                grunt.Play();
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             }
         }
