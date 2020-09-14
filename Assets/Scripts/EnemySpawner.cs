@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
     {
         xPos = -0.2f;
         zPos = 3.0f;
-        spawnTime = 1.5f;
+        spawnTime = 2.0f;
         StartCoroutine(EnemyDrop());
         rend = skyDome.GetComponent<Renderer>();
         domeTime = startDomeTime;
@@ -49,9 +49,9 @@ public class EnemySpawner : MonoBehaviour
             if (Time.time < 10.0f) {
 
             } else if (Time.time < 30.0f) {
-                spawnTime = 1.0f;
+                spawnTime = 1.5f;
             } else {
-                spawnTime = 0.5f;
+                spawnTime = 1.0f;
             }
             yield return new WaitForSeconds(spawnTime);
         }

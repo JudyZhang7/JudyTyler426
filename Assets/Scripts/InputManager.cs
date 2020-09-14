@@ -93,7 +93,7 @@ public class InputManager : MonoBehaviour
         orbTimer = 2.0f;
         foreach(ParticleSystem particle in orb.GetComponentsInChildren<ParticleSystem>())
         {
-            particle.time = 2;
+            particle.time = 1;
         }
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
