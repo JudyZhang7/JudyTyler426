@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -10,6 +11,13 @@ public class EnemySpawner : MonoBehaviour
     private float xPos;
     private float zPos;
     private float spawnTime;
+    // environment updates
+    public Slider slider;
+    public GameObject skyDome;
+    private Renderer rend;
+    private float domeTime;
+    private float startDomeTime = 0.0f; //6.66
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +37,7 @@ public class EnemySpawner : MonoBehaviour
                 xPos = Random.Range(4, 12);
             }
             zPos = Random.Range(player_zPos +20, player_zPos + 30);
-            Debug.Log(player_xPos + " " + player_zPos);
+            // Debug.Log(player_xPos + " " + player_zPos);
             
             if (Random.Range(0, 2) == 0) {
                 Instantiate(strongHeartPrefab, new Vector3(xPos, 2, zPos), Quaternion.identity);
@@ -46,9 +54,17 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(spawnTime);
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+    void Update () {
+        Debug.Log("DOES THIS EVEN GET CALLED?");
+        // skydome
+        float offset = domeTime * 0.03f * 0.5f;
+        domeTime += Time.deltaTime;
+        if (offset < 0.43){
+            rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
+        }
+        //Displays the value of the slider in the console.
+        Debug.Log(slider.value);
+        slider.value = Time.time/50.0f;
     }
 }

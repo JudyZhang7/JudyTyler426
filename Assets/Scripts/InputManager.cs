@@ -75,9 +75,7 @@ public class InputManager : MonoBehaviour
                 var force = enemy.transform.position - transform.position;
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
-
                 enemy.GetComponent<EnemyScript>().enabled = false;
-
             } else {
                 Destroy(hitData.collider.gameObject);
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
@@ -107,7 +105,7 @@ public class InputManager : MonoBehaviour
                 var force = enemy.transform.position - transform.position;
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
-                enemy.active = false; // make inactive
+                enemy.GetComponent<EnemyScript>().enabled = false;
             } else {
                 Destroy(hitData.collider.gameObject);
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);

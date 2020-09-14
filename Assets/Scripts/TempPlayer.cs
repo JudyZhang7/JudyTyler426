@@ -21,32 +21,32 @@ public class TempPlayer : MonoBehaviour
 
     public float speed = 20f;
  
-     void Update () {
-         // skydome
-        float offset = domeTime * 0.03f * 0.5f;
-        domeTime += Time.deltaTime;
-        if (offset < 0.43){
-            rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
+    void Update () {
+        // skydome
+    float offset = domeTime * 0.03f * 0.5f;
+    domeTime += Time.deltaTime;
+    if (offset < 0.43){
+        rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
+    }
+
+        Vector3 pos = transform.position;
+
+        if (Input.GetKey ("w")) {
+            pos.z += speed * Time.deltaTime;
         }
+        if (Input.GetKey ("s")) {
+            pos.z -= speed * Time.deltaTime;
+        }
+        if (Input.GetKey ("d")) {
+            pos.x += speed * Time.deltaTime;
+        }
+        if (Input.GetKey ("a")) {
+            pos.x -= speed * Time.deltaTime;
+        }
+        transform.position = pos;
+        //Displays the value of the slider in the console.
+    Debug.Log(slider.value);
+    slider.value = transform.position.z/250;
 
-         Vector3 pos = transform.position;
- 
-         if (Input.GetKey ("w")) {
-             pos.z += speed * Time.deltaTime;
-         }
-         if (Input.GetKey ("s")) {
-             pos.z -= speed * Time.deltaTime;
-         }
-         if (Input.GetKey ("d")) {
-             pos.x += speed * Time.deltaTime;
-         }
-         if (Input.GetKey ("a")) {
-             pos.x -= speed * Time.deltaTime;
-         }
-         transform.position = pos;
-         //Displays the value of the slider in the console.
-        Debug.Log(slider.value);
-        slider.value = transform.position.z/250;
-
-     }
+    }
 }

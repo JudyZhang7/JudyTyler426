@@ -253,7 +253,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 59cf63250acfc334288c35253c616d40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15499,6 +15499,11 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1510928679 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100010, guid: d0223f77114284b47a0e8b317e71e4dc, type: 3}
+  m_PrefabInstance: {fileID: 1151662572}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1606230809
 GameObject:
   m_ObjectHideFlags: 0
@@ -15568,7 +15573,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 59cf63250acfc334288c35253c616d40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15693,7 +15698,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1e23b2d236a58f040968acd05c361bce, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15781,6 +15786,8 @@ MonoBehaviour:
   strongHeartPrefab: {fileID: 8362874514601218616, guid: 8697fe4e4cf34445290c1929079b8bc0, type: 3}
   strongBodPrefab: {fileID: 8700939855721098267, guid: 1c3de473a0e8845a481ae15f0becc920, type: 3}
   player: {fileID: 1843001284}
+  slider: {fileID: 2059249032}
+  skyDome: {fileID: 1510928679}
 --- !u!4 &1716889420
 Transform:
   m_ObjectHideFlags: 0
