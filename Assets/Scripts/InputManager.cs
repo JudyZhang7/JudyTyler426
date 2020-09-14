@@ -65,10 +65,23 @@ public class InputManager : MonoBehaviour
     {
         //Scan for enemies; current max distance is 7
         RaycastHit hitData = CheckEnemies();
+        // if collider is sphere, destroy
         if (hitData.collider != null)
         {
-            Destroy(hitData.collider.gameObject);
-            Debug.Log(hitData.collider.gameObject.name);
+            if (hitData.collider.gameObject.tag.Equals("BODY")) {
+                // bounce back
+                GameObject enemy = hitData.collider.gameObject;
+                var magnitude = 1500;
+                var force = enemy.transform.position - transform.position;
+                force.Normalize();
+                enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
+
+                enemy.GetComponent<EnemyScript>().enabled = false;
+
+            } else {
+                Destroy(hitData.collider.gameObject);
+                Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+            }
         }
         
         //Move the hand
@@ -87,8 +100,18 @@ public class InputManager : MonoBehaviour
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
         {
-            Destroy(hitData.collider.gameObject);
-            Debug.Log(hitData.collider.gameObject.name);
+            if (hitData.collider.gameObject.tag.Equals("HEART")) {
+                // bounce back
+                GameObject enemy = hitData.collider.gameObject;
+                var magnitude = 1500;
+                var force = enemy.transform.position - transform.position;
+                force.Normalize();
+                enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
+                enemy.active = false; // make inactive
+            } else {
+                Destroy(hitData.collider.gameObject);
+                Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+            }
         }
     }
     // Update is called once per frame

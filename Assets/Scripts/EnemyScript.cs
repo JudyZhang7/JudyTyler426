@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    public GameObject target; // future use?
-    public float speed = 2.8f;
+    public float speed = 3.0f;
     private Vector3 targetPosition;
     
     void Awake()
@@ -15,13 +14,19 @@ public class EnemyScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // targetPosition = new Vector3(0, 0, 0);
+        targetPosition = new Vector3(0, 1, -10);
     }
 
     // Update is called once per frame
     void Update()
     {
-        targetPosition = target.transform.position;
+        if (Time.time < 10.0f) {
+            speed = 3.0f;
+        } else if (Time.time < 30.0f) {
+            speed = 5.0f;
+        } else {
+            speed = 10.0f;
+        }
         float step =  speed * Time.deltaTime; // calculate distance to move
         // timer -= timer * Time.deltaTime;
         // Leave some space between
