@@ -15,7 +15,7 @@ public class CorridorMove : MonoBehaviour
     {
         if (Time.time < 50.0f) {
             transform.Translate(Vector3.forward * -Time.deltaTime * 5);
-            Debug.Log("Time: " + Time.time);
+            // Debug.Log("Time: " + Time.time);
         }
     }
 }

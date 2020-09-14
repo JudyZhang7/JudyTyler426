@@ -25,6 +25,8 @@ public class EnemySpawner : MonoBehaviour
         zPos = 3.0f;
         spawnTime = 1.5f;
         StartCoroutine(EnemyDrop());
+        rend = skyDome.GetComponent<Renderer>();
+        domeTime = startDomeTime;
     }
 
     IEnumerator EnemyDrop() {

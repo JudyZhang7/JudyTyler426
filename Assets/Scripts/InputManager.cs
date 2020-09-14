@@ -112,6 +112,7 @@ public class InputManager : MonoBehaviour
             }
         }
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -120,6 +121,8 @@ public class InputManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.A) && Input.GetKeyDown(KeyCode.D))
         {
             Debug.Log("killing people is bad");
+            Scare();
+            Punch();
         } else if (Input.GetKeyDown(KeyCode.D) && !isPunching)
         {
             Punch();
