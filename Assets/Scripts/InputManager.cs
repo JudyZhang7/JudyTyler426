@@ -25,13 +25,24 @@ public class InputManager : MonoBehaviour
     public Color dangerColor = Color.black;
     public Color overColor = Color.red;
     public static int numSpared = 0; // counter for saved enemies
-    public Slider slider;
+    // public Slider slider;
+    private float ghostSpeed = .13f;
+    public GameObject ghost;
+    private RectTransform ghostRect;
     private float timeLeft;
+    private Vector2 ghostDelta;
+    private Vector2 ghostMaxDelta;
+    private Vector2 ghostMinDelta;
 
     // Start is called before the first frame update
     void Start()
     {
         dangerTime = dangerMaxTime;
+        ghostRect = ghost.GetComponent<RectTransform>();
+        ghostDelta = ghostRect.sizeDelta;
+        Debug.Log(ghostRect.rect.width + ", " + ghostRect.rect.height);
+        ghostMaxDelta = new Vector2(ghostRect.rect.width + 16.0f, ghostRect.rect.height + 16.0f);
+        ghostMinDelta = new Vector2(ghostRect.rect.width - 31.0f, ghostRect.rect.height - 31.0f);
         timeLeft = 0;
     }
 
@@ -81,6 +92,30 @@ public class InputManager : MonoBehaviour
         return res;
     }
 
+    void ScareAndPunch() {
+        RaycastHit hitData = CheckEnemies();
+        orb.SetActive(true);
+        orbTimer = 0.5f;
+        hand.GetComponent<MeshRenderer>().enabled = true;
+        StartCoroutine(PunchAnim());
+        punch.Play();
+        scare.Play();
+        if (hitData.collider != null) {
+            Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
+            Destroy(hitData.collider.gameObject);
+            GetComponent<AudioSource>().Play();
+            if (hitData.collider.gameObject.tag.Equals("BODY")) {
+                grunt.Play();
+            } else {
+                shriek.Play();
+            }
+            Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+            if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
+                ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
+            }
+        }
+    }
+
     void Punch()
     {
         //Scan for enemies; current max distance is 7
@@ -98,13 +133,18 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
                 enemy.transform.localScale -= new Vector3(1, 1, 1);
+                if (ghostRect.sizeDelta.x < ghostMaxDelta.x) {
+                    ghostRect.sizeDelta = new Vector2(ghostRect.rect.width + 15.0f, ghostRect.rect.height + 15.0f);
+                }
                 numSpared += 1;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 Destroy(hitData.collider.gameObject);
                 GetComponent<AudioSource>().Play();
                 shriek.Play();
-                Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+                if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
+                    ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
+                }
             }
         }
         
@@ -130,6 +170,9 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
                 enemy.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
+                if (ghostRect.sizeDelta.x < ghostMaxDelta.x) {
+                    ghostRect.sizeDelta = new Vector2(ghostRect.rect.width + 15.0f, ghostRect.rect.height + 15.0f);
+                }
                 numSpared += 1;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
@@ -137,6 +180,9 @@ public class InputManager : MonoBehaviour
                 GetComponent<AudioSource>().Play();
                 grunt.Play();
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+                if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
+                    ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
+                }
             }
         }
     }
@@ -146,11 +192,14 @@ public class InputManager : MonoBehaviour
     {
         MoveCamera();
         Debug.DrawLine(hand.transform.position, hand.transform.forward * 5 +  hand.transform.position, Color.red);
-        if (Input.GetKeyDown(KeyCode.D) && !isPunching)
+        if (Input.GetKeyDown(KeyCode.D) && Input.GetKeyDown(KeyCode.A)){
+            ScareAndPunch();
+        }
+        else if (Input.GetKeyDown(KeyCode.D) && !isPunching)
         {
             Punch();
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        else if (Input.GetKeyDown(KeyCode.A))
         {
             Scare();
         }
@@ -182,9 +231,10 @@ public class InputManager : MonoBehaviour
         if (orbTimer > 0) orbTimer -= Time.deltaTime;
         else orb.SetActive(false);
         timeLeft += Time.deltaTime;
-        // update slider
+        // update ghostie
+        ghostRect.Translate(ghostSpeed, 0f, 0f);
         //Debug.Log("NUM SPARED: " + numSpared);
         // slider.value = numSpared/30.0f;
-        slider.value = timeLeft/50.0f;
+        // slider.value = timeLeft/50.0f;
     }
 }
