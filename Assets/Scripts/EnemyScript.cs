@@ -20,9 +20,9 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time < 10.0f) {
+        if (Time.timeSinceLevelLoad < 10.0f) {
             speed = 3.0f;
-        } else if (Time.time < 30.0f) {
+        } else if (Time.timeSinceLevelLoad < 30.0f) {
             speed = 5.0f;
         } else {
             speed = 10.0f;

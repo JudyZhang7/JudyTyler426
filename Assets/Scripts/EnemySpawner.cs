@@ -21,14 +21,14 @@ public class EnemySpawner : MonoBehaviour
     {
         xPos = -0.2f;
         zPos = 3.0f;
-        spawnTime = 2.0f;
+        spawnTime = 1.9f;
         StartCoroutine(EnemyDrop());
         rend = skyDome.GetComponent<Renderer>();
         domeTime = startDomeTime;
     }
 
     IEnumerator EnemyDrop() {
-        while(Time.time < 50.0f) {
+        while(Time.timeSinceLevelLoad < 50.0f) {
             float player_xPos = player.transform.position.x;
             float player_zPos = player.transform.position.z;
             if (Random.Range(0, 2) == 1) {
@@ -44,12 +44,12 @@ public class EnemySpawner : MonoBehaviour
             } else {
                 Instantiate(strongBodPrefab, new Vector3(xPos, 2, zPos), Quaternion.identity);
             }
-            if (Time.time < 10.0f) {
-
-            } else if (Time.time < 30.0f) {
-                spawnTime = 1.5f;
+            if (Time.timeSinceLevelLoad < 10.0f) {
+               
+            } else if (Time.timeSinceLevelLoad < 30.0f) {
+                spawnTime = 1.3f;
             } else {
-                spawnTime = 1.0f;
+                spawnTime = 0.8f;
             }
             yield return new WaitForSeconds(spawnTime);
         }

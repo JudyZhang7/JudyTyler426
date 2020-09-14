@@ -7,7 +7,9 @@ public class EndScreen : MonoBehaviour
 {
     public Vector4 color;
     SpriteRenderer spriteRenderer;
-    float timer = -1;
+    public GameObject mainAudio;
+    float timer = 0;
+    public AudioClip[] clips;
 
     // Start is called before the first frame update
     void Start()
@@ -15,22 +17,21 @@ public class EndScreen : MonoBehaviour
         color.w = 0;
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = color;
+        mainAudio.GetComponent<AudioSource>().Pause();
+        if (color.x > 0) GetComponent<AudioSource>().clip = clips[1];
+        else GetComponent<AudioSource>().clip = clips[0];
+        GetComponent<AudioSource>().Play();
     }
 
-    public void StartTimer()
-    {
-        timer = 0;
-    }
     // Update is called once per frame
     void Update()
     {
-        if (timer >= 0) timer += Time.deltaTime;
+        timer += Time.deltaTime;
         if (color.w < 1)
         {
-            color.w += Time.deltaTime*0.5f;
+            color.w += Time.deltaTime*0.75f;
             spriteRenderer.color = color;
         }
         else if (timer > 5) SceneManager.LoadScene(0);
-        //if (timer > 3) SceneManager.LoadScene(0);
     }
 }

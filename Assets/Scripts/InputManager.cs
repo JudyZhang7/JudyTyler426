@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     public GameObject hand;
     public GameObject orb;
     public GameObject explosionPrefab;
+    public GameObject endScreen;
 
     private bool isPunching = false;
     float orbTimer = 0;
@@ -23,7 +24,7 @@ public class InputManager : MonoBehaviour
     public Color safeColor = Color.white;
     public Color dangerColor = Color.black;
     public Color overColor = Color.red;
-    private int numSpared = 0; // counter for saved enemies
+    public static int numSpared = 0; // counter for saved enemies
     public Slider slider;
 
     // Start is called before the first frame update
@@ -86,6 +87,7 @@ public class InputManager : MonoBehaviour
         // if collider is sphere, destroy
         if (hitData.collider != null)
         {
+            hitData.collider.enabled = false;
             if (hitData.collider.gameObject.tag.Equals("BODY")) {
                 // bounce back
                 GameObject enemy = hitData.collider.gameObject;
@@ -95,10 +97,11 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
                 numSpared += 1;
+                grunt.Play();
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
-                grunt.Play();
                 Destroy(hitData.collider.gameObject);
+                GetComponent<AudioSource>().Play();
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             }
         }
@@ -111,15 +114,12 @@ public class InputManager : MonoBehaviour
     void Scare()
     {
         orb.SetActive(true);
-        orbTimer = 2.0f;
-        foreach(ParticleSystem particle in orb.GetComponentsInChildren<ParticleSystem>())
-        {
-            particle.time = 1;
-        }
+        orbTimer = 0.5f;
         scare.Play();
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
         {
+            hitData.collider.enabled = false;
             if (hitData.collider.gameObject.tag.Equals("HEART")) {
                 // bounce back
                 GameObject enemy = hitData.collider.gameObject;
@@ -128,11 +128,12 @@ public class InputManager : MonoBehaviour
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
+                shriek.Play();
                 numSpared += 1;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
-                shriek.Play();
                 Destroy(hitData.collider.gameObject);
+                GetComponent<AudioSource>().Play();
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             }
         }
@@ -143,15 +144,11 @@ public class InputManager : MonoBehaviour
     {
         MoveCamera();
         Debug.DrawLine(hand.transform.position, hand.transform.forward * 5 +  hand.transform.position, Color.red);
-        if(Input.GetKeyDown(KeyCode.A) && Input.GetKeyDown(KeyCode.D))
-        {
-            Debug.Log("killing people is bad");
-            Scare();
-            Punch();
-        } else if (Input.GetKeyDown(KeyCode.D) && !isPunching)
+        if (Input.GetKeyDown(KeyCode.D) && !isPunching)
         {
             Punch();
-        } else if (Input.GetKeyDown(KeyCode.A))
+        }
+        if (Input.GetKeyDown(KeyCode.A))
         {
             Scare();
         }
@@ -168,7 +165,11 @@ public class InputManager : MonoBehaviour
             }
             if (dangerTime <= 0)
             {
-                SceneManager.LoadScene(0);
+                if (!endScreen.activeSelf)
+                {
+                    endScreen.GetComponent<EndScreen>().color = new Vector4(0, 0, 0, 0);
+                    endScreen.SetActive(true);
+                }
             }
         } else {
             dangerTime = dangerMaxTime;
@@ -177,7 +178,7 @@ public class InputManager : MonoBehaviour
         else orb.SetActive(false);
 
         // update slider
-        Debug.Log("NUM SPARED: " + numSpared);
+        //Debug.Log("NUM SPARED: " + numSpared);
         slider.value = numSpared/30.0f;
         //         slider.value = Time.time/50.0f;
     }
