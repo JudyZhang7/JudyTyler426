@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class EnemySpawner : MonoBehaviour
     private float zPos;
     private float spawnTime;
     // environment updates
-    public Slider slider;
     public GameObject skyDome;
     private Renderer rend;
     private float domeTime;
@@ -64,7 +62,5 @@ public class EnemySpawner : MonoBehaviour
         if (offset < 0.43){
             rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
         }
-        //Displays the value of the slider in the console.
-        slider.value = Time.time/50.0f;
     }
 }

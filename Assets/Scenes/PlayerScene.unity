@@ -5350,6 +5350,7 @@ MonoBehaviour:
   safeColor: {r: 0.2891153, g: 0.44894093, b: 0.6886792, a: 0}
   dangerColor: {r: 0, g: 0, b: 0, a: 1}
   overColor: {r: 0.8018868, g: 0.19290671, b: 0.19290671, a: 0.6392157}
+  slider: {fileID: 2059249032}
 --- !u!4 &159840625
 Transform:
   m_ObjectHideFlags: 0
@@ -16054,7 +16055,6 @@ MonoBehaviour:
   strongHeartPrefab: {fileID: 8362874514601218616, guid: 8697fe4e4cf34445290c1929079b8bc0, type: 3}
   strongBodPrefab: {fileID: 8700939855721098267, guid: 1c3de473a0e8845a481ae15f0becc920, type: 3}
   player: {fileID: 1843001284}
-  slider: {fileID: 2059249032}
   skyDome: {fileID: 1510928679}
 --- !u!4 &1716889420
 Transform:

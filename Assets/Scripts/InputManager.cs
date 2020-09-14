@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
@@ -22,12 +23,13 @@ public class InputManager : MonoBehaviour
     public Color safeColor = Color.white;
     public Color dangerColor = Color.black;
     public Color overColor = Color.red;
+    private int numSpared = 0; // counter for saved enemies
+    public Slider slider;
 
     // Start is called before the first frame update
     void Start()
     {
         dangerTime = dangerMaxTime;
-
     }
 
     void MoveCamera()
@@ -92,6 +94,7 @@ public class InputManager : MonoBehaviour
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
+                numSpared += 1;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 grunt.Play();
@@ -125,6 +128,7 @@ public class InputManager : MonoBehaviour
                 force.Normalize();
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
+                numSpared += 1;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 shriek.Play();
@@ -171,5 +175,10 @@ public class InputManager : MonoBehaviour
         }
         if (orbTimer > 0) orbTimer -= Time.deltaTime;
         else orb.SetActive(false);
+
+        // update slider
+        Debug.Log("NUM SPARED: " + numSpared);
+        slider.value = numSpared/30.0f;
+        //         slider.value = Time.time/50.0f;
     }
 }
