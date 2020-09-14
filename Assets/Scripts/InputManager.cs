@@ -26,11 +26,13 @@ public class InputManager : MonoBehaviour
     public Color overColor = Color.red;
     public static int numSpared = 0; // counter for saved enemies
     public Slider slider;
+    private float timeLeft;
 
     // Start is called before the first frame update
     void Start()
     {
         dangerTime = dangerMaxTime;
+        timeLeft = 0;
     }
 
     void MoveCamera()
@@ -158,6 +160,9 @@ public class InputManager : MonoBehaviour
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
         {
+            Renderer renderer = hitData.collider.gameObject.GetComponent<Renderer>(); 
+            renderer.material.color = Color.white;
+
             dangerTime -= Time.deltaTime;
             float endLerp = 1 - (dangerTime / dangerMaxTime);
             if (dangerTime <= 2) {
@@ -176,10 +181,10 @@ public class InputManager : MonoBehaviour
         }
         if (orbTimer > 0) orbTimer -= Time.deltaTime;
         else orb.SetActive(false);
-
+        timeLeft += Time.deltaTime;
         // update slider
         //Debug.Log("NUM SPARED: " + numSpared);
         // slider.value = numSpared/30.0f;
-        slider.value = Time.time/50.0f;
+        slider.value = timeLeft/50.0f;
     }
 }
