@@ -179,7 +179,7 @@ public class InputManager : MonoBehaviour
 
         // update slider
         //Debug.Log("NUM SPARED: " + numSpared);
-        slider.value = numSpared/30.0f;
-        //         slider.value = Time.time/50.0f;
+        // slider.value = numSpared/30.0f;
+        slider.value = Time.time/50.0f;
     }
 }
