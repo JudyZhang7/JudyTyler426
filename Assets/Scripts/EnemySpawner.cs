@@ -58,7 +58,6 @@ public class EnemySpawner : MonoBehaviour
     }
 
     void Update () {
-        Debug.Log("DOES THIS EVEN GET CALLED?");
         // skydome
         float offset = domeTime * 0.03f * 0.5f;
         domeTime += Time.deltaTime;
@@ -66,7 +65,6 @@ public class EnemySpawner : MonoBehaviour
             rend.material.SetTextureOffset("_MainTex", new Vector2(offset, 0));
         }
         //Displays the value of the slider in the console.
-        Debug.Log(slider.value);
         slider.value = Time.time/50.0f;
     }
 }

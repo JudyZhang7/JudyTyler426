@@ -1,18 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
     public GameObject hand;
     public GameObject orb;
+    public GameObject explosionPrefab;
+
     private bool isPunching = false;
     float orbTimer = 0;
+    public AudioSource punch;
+    public AudioSource scare;
+    public AudioSource shriek;
+    public AudioSource grunt;
+
+    public float dangerMaxTime = 3.5f;
+    private float dangerTime;
+    public Light backgroundLight;
+    public Color safeColor = Color.white;
+    public Color dangerColor = Color.black;
+    public Color overColor = Color.red;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        dangerTime = dangerMaxTime;
+
     }
 
     void MoveCamera()
@@ -65,6 +80,7 @@ public class InputManager : MonoBehaviour
     {
         //Scan for enemies; current max distance is 7
         RaycastHit hitData = CheckEnemies();
+        punch.Play();
         // if collider is sphere, destroy
         if (hitData.collider != null)
         {
@@ -77,6 +93,8 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
             } else {
+                Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
+                grunt.Play();
                 Destroy(hitData.collider.gameObject);
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             }
@@ -95,6 +113,7 @@ public class InputManager : MonoBehaviour
         {
             particle.time = 1;
         }
+        scare.Play();
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
         {
@@ -107,6 +126,8 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
             } else {
+                Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
+                shriek.Play();
                 Destroy(hitData.collider.gameObject);
                 Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             }
@@ -129,6 +150,24 @@ public class InputManager : MonoBehaviour
         } else if (Input.GetKeyDown(KeyCode.A))
         {
             Scare();
+        }
+        
+        backgroundLight.color = Color.Lerp(safeColor, dangerColor, 0.5f);
+
+        RaycastHit hitData = CheckEnemies();
+        if (hitData.collider != null)
+        {
+            dangerTime -= Time.deltaTime;
+            float endLerp = 1 - (dangerTime / dangerMaxTime);
+            if (dangerTime <= 2) {
+                backgroundLight.color = Color.Lerp(dangerColor, overColor, 0.5f);
+            }
+            if (dangerTime <= 0)
+            {
+                SceneManager.LoadScene(0);
+            }
+        } else {
+            dangerTime = dangerMaxTime;
         }
         if (orbTimer > 0) orbTimer -= Time.deltaTime;
         else orb.SetActive(false);
