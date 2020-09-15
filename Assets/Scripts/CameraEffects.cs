@@ -8,7 +8,7 @@ public class CameraEffects : MonoBehaviour {
 	public float shakeDuration = 0.3f;
 	
 	// Amplitude of the shake. A larger value shakes the camera harder.
-	public float shakeAmount = 1.5f;
+	public float shakeAmount = 0.2f;
 	public float decreaseFactor = 1.0f;
 	public bool enabled = false;
 
