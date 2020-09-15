@@ -18,8 +18,8 @@ public class ScoreDisplay : MonoBehaviour
 
     public void Flash()
     {
-        //text.color = start;
-        //timer = 1.0f;
+        text.color = start;
+        timer = 1.0f;
     }
 
     // Update is called once per frame
