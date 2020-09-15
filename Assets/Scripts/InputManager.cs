@@ -80,7 +80,7 @@ public class InputManager : MonoBehaviour
     IEnumerator PunchAnim()
     {
         // cameraEffects.enabled = true;
-        cameraEffects.ShakeIntensifying(0.5f, 1.5f, 0.3f);
+        cameraEffects.ShakeIntensifying(1.5f, 2.0f, 0.7f);
         isPunching = true;
         float timer = 0.0f;
         Vector3 target;
