@@ -79,8 +79,8 @@ public class InputManager : MonoBehaviour
 
     IEnumerator PunchAnim()
     {
-        cameraEffects.enabled = true;
-        cameraEffects.shakeDuration = 0.3f;
+        // cameraEffects.enabled = true;
+        cameraEffects.ShakeIntensifying(0.5f, 1.5f, 0.3f);
         isPunching = true;
         float timer = 0.0f;
         Vector3 target;
@@ -100,7 +100,8 @@ public class InputManager : MonoBehaviour
             yield return null;
         }
         hand.GetComponent<MeshRenderer>().enabled = false;
-        cameraEffects.enabled = false;
+        // cameraEffects.enabled = false;
+        cameraEffects.toShake = false;
         isPunching = false;
     }
 
