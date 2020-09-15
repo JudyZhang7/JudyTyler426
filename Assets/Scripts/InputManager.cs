@@ -43,7 +43,7 @@ public class InputManager : MonoBehaviour
         dangerTime = dangerMaxTime;
         ghostRect = ghost.GetComponent<RectTransform>();
         ghostDelta = ghostRect.sizeDelta;
-        Debug.Log(ghostRect.rect.width + ", " + ghostRect.rect.height);
+        // Debug.Log(ghostRect.rect.width + ", " + ghostRect.rect.height);
         ghostMaxDelta = new Vector2(ghostRect.rect.width + 16.0f, ghostRect.rect.height + 16.0f);
         ghostMinDelta = new Vector2(ghostRect.rect.width - 31.0f, ghostRect.rect.height - 31.0f);
         ghost.transform.position = new Vector3(ghost.transform.position.x, Screen.height - 55);
