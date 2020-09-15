@@ -35,6 +35,7 @@ public class InputManager : MonoBehaviour
     private Vector2 ghostMaxDelta;
     private Vector2 ghostMinDelta;
     private AudioSource audioSource;
+    private Vector3 ghostStart;
     private float[] pitches = {1.0f,0.4f,0.5f,0.8f,0.7f};
 
     CameraEffects cameraEffects;
@@ -54,6 +55,7 @@ public class InputManager : MonoBehaviour
         ghostBG.SetActive(true);
         timeLeft = 0;
         numSpared = 0;
+        ghostStart = ghost.transform.position;
         cameraEffects = Camera.main.GetComponent<CameraEffects>();
     }
 
@@ -251,7 +253,7 @@ public class InputManager : MonoBehaviour
         else orb.SetActive(false);
         timeLeft += Time.deltaTime;
         // update ghostie
-        ghost.transform.position = new Vector3(Time.timeSinceLevelLoad / 50.0f * Screen.width, ghost.transform.position.y);
+        ghost.transform.position = Vector3.Lerp(ghostStart, new Vector3(Screen.width, ghostStart.y), Time.timeSinceLevelLoad / 50.0f);
         //Debug.Log("NUM SPARED: " + numSpared);
         // slider.value = numSpared/30.0f;
         // slider.value = timeLeft/50.0f;
