@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
     public GameObject orb;
     public GameObject explosionPrefab;
     public GameObject endScreen;
+    public GameObject ghostBG;
+    public GameObject scoreDisplay;
 
     private bool isPunching = false;
     float orbTimer = 0;
@@ -26,13 +28,14 @@ public class InputManager : MonoBehaviour
     public Color overColor = Color.red;
     public static int numSpared = 0; // counter for saved enemies
     // public Slider slider;
-    private float ghostSpeed = .13f;
     public GameObject ghost;
     private RectTransform ghostRect;
     private float timeLeft;
     private Vector2 ghostDelta;
     private Vector2 ghostMaxDelta;
     private Vector2 ghostMinDelta;
+    private AudioSource audioSource;
+    private float[] pitches = {1.0f,0.4f,0.5f,0.8f,0.7f};
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +46,13 @@ public class InputManager : MonoBehaviour
         Debug.Log(ghostRect.rect.width + ", " + ghostRect.rect.height);
         ghostMaxDelta = new Vector2(ghostRect.rect.width + 16.0f, ghostRect.rect.height + 16.0f);
         ghostMinDelta = new Vector2(ghostRect.rect.width - 31.0f, ghostRect.rect.height - 31.0f);
+        ghost.transform.position = new Vector3(ghost.transform.position.x, Screen.height - 55);
+        ghostBG.transform.position = new Vector3(ghostBG.transform.position.x, Screen.height - 50);
+        audioSource = GetComponent<AudioSource>();
+        ghost.SetActive(true);
+        ghostBG.SetActive(true);
         timeLeft = 0;
+        numSpared = 0;
     }
 
     void MoveCamera()
@@ -98,18 +107,17 @@ public class InputManager : MonoBehaviour
         orbTimer = 0.5f;
         hand.GetComponent<MeshRenderer>().enabled = true;
         StartCoroutine(PunchAnim());
-        punch.Play();
-        scare.Play();
+        if(punch.time >= punch.clip.length*3/4 || punch.time == 0.0f) punch.Play();
+        if(scare.time >= scare.clip.length*3/4 || scare.time == 0.0f) scare.Play();
         if (hitData.collider != null) {
             Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
             Destroy(hitData.collider.gameObject);
-            GetComponent<AudioSource>().Play();
             if (hitData.collider.gameObject.tag.Equals("BODY")) {
-                grunt.Play();
+                if(grunt.time >= grunt.clip.length*3/4 || grunt.time == 0.0f) grunt.Play();
             } else {
-                shriek.Play();
+                if(shriek.time >= shriek.clip.length*3/4 || shriek.time == 0.0f) shriek.Play();
             }
-            Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+            //Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
             if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
                 ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
             }
@@ -120,7 +128,7 @@ public class InputManager : MonoBehaviour
     {
         //Scan for enemies; current max distance is 7
         RaycastHit hitData = CheckEnemies();
-        punch.Play();
+        if (punch.time >= punch.clip.length * 3 / 4 || punch.time == 0.0f) punch.Play();
         // if collider is sphere, destroy
         if (hitData.collider != null)
         {
@@ -133,15 +141,18 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
                 enemy.transform.localScale -= new Vector3(1, 1, 1);
+                audioSource.pitch = pitches[Random.Range(0, pitches.Length)];
+                if (!audioSource.isPlaying || audioSource.time >= audioSource.clip.length * 5 / 6) audioSource.Play();
+                enemy.GetComponent<MeshRenderer>().material = hand.GetComponent<MeshRenderer>().material;
                 if (ghostRect.sizeDelta.x < ghostMaxDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width + 15.0f, ghostRect.rect.height + 15.0f);
                 }
                 numSpared += 1;
+                scoreDisplay.GetComponent<ScoreDisplay>().Flash();
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 Destroy(hitData.collider.gameObject);
-                GetComponent<AudioSource>().Play();
-                shriek.Play();
+                if (shriek.time >= shriek.clip.length * 3 / 4 || shriek.time == 0.0f) shriek.Play();
                 if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
                 }
@@ -157,7 +168,7 @@ public class InputManager : MonoBehaviour
     {
         orb.SetActive(true);
         orbTimer = 0.5f;
-        scare.Play();
+        if (scare.time >= scare.clip.length * 3 / 4 || scare.time == 0.0f) scare.Play();
         RaycastHit hitData = CheckEnemies();
         if (hitData.collider != null)
         {
@@ -170,16 +181,19 @@ public class InputManager : MonoBehaviour
                 enemy.GetComponent<Rigidbody>().AddForce(force * magnitude);
                 enemy.GetComponent<EnemyScript>().enabled = false;
                 enemy.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
+                audioSource.pitch = pitches[Random.Range(0, pitches.Length)];
+                if (!audioSource.isPlaying || audioSource.time >= audioSource.clip.length*5/6) audioSource.Play();
+                enemy.GetComponent<MeshRenderer>().material = hand.GetComponent<MeshRenderer>().material;
                 if (ghostRect.sizeDelta.x < ghostMaxDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width + 15.0f, ghostRect.rect.height + 15.0f);
                 }
                 numSpared += 1;
+                scoreDisplay.GetComponent<ScoreDisplay>().Flash();
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 Destroy(hitData.collider.gameObject);
-                GetComponent<AudioSource>().Play();
-                grunt.Play();
-                Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
+                if (grunt.time >= grunt.clip.length * 3 / 4 || grunt.time == 0.0f) grunt.Play();
+                //Debug.Log("DESTROYED " + hitData.collider.gameObject.tag);
                 if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
                 }
@@ -232,7 +246,7 @@ public class InputManager : MonoBehaviour
         else orb.SetActive(false);
         timeLeft += Time.deltaTime;
         // update ghostie
-        ghostRect.Translate(ghostSpeed, 0f, 0f);
+        ghost.transform.position = new Vector3(Time.timeSinceLevelLoad / 50.0f * Screen.width, ghost.transform.position.y);
         //Debug.Log("NUM SPARED: " + numSpared);
         // slider.value = numSpared/30.0f;
         // slider.value = timeLeft/50.0f;
