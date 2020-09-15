@@ -353,7 +353,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ea6413da79a4645fba411212ef053b12, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5404,6 +5404,8 @@ MonoBehaviour:
   endScreen: {fileID: 1678380906}
   ghostBG: {fileID: 937810060}
   scoreDisplay: {fileID: 1813811953}
+  bgMusic: {fileID: 695265459}
+  mainLight: {fileID: 2119099605}
   punch: {fileID: 1805795429}
   scare: {fileID: 89057591}
   shriek: {fileID: 1940761126}
@@ -5820,7 +5822,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 72e339967798b42228bc7363de2eb913, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6074,7 +6076,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ec549b4c26d39442bb37ddfe206f4b6c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.7
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -6192,8 +6194,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1031, y: -62}
-  m_SizeDelta: {x: 130.86383, y: 103}
+  m_AnchoredPosition: {x: 1226, y: -62}
+  m_SizeDelta: {x: 298.87085, y: 103}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &937810062
 MonoBehaviour:
@@ -16967,7 +16969,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b58c21a52b96546da815a2a184a46c1b, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -17509,7 +17511,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f27207688874d4e4bae50b5127744411, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.702
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0

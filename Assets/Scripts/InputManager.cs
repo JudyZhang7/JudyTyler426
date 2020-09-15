@@ -12,6 +12,8 @@ public class InputManager : MonoBehaviour
     public GameObject endScreen;
     public GameObject ghostBG;
     public GameObject scoreDisplay;
+    public AudioSource bgMusic;
+    public Light mainLight;
 
     private bool isPunching = false;
     float orbTimer = 0;
@@ -48,15 +50,16 @@ public class InputManager : MonoBehaviour
         // Debug.Log(ghostRect.rect.width + ", " + ghostRect.rect.height);
         ghostMaxDelta = new Vector2(ghostRect.rect.width + 16.0f, ghostRect.rect.height + 16.0f);
         ghostMinDelta = new Vector2(ghostRect.rect.width - 31.0f, ghostRect.rect.height - 31.0f);
-        ghost.transform.position = new Vector3(ghost.transform.position.x, Screen.height - 55);
         ghostBG.transform.position = new Vector3(ghostBG.transform.position.x, Screen.height - 50);
         audioSource = GetComponent<AudioSource>();
         ghost.SetActive(true);
         ghostBG.SetActive(true);
         timeLeft = 0;
         numSpared = 0;
+        ghost.transform.position = new Vector2(0, Screen.height - 55);
         ghostStart = ghost.transform.position;
         cameraEffects = Camera.main.GetComponent<CameraEffects>();
+        mainLight.intensity = 1.0f;
     }
 
     void MoveCamera()
@@ -128,6 +131,7 @@ public class InputManager : MonoBehaviour
             if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
                 ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
             }
+            if (Time.timeSinceLevelLoad > 20 && mainLight.intensity > 0.2f) mainLight.intensity -= 0.05f;
         }
     }
 
@@ -156,6 +160,7 @@ public class InputManager : MonoBehaviour
                 }
                 numSpared += 1;
                 scoreDisplay.GetComponent<ScoreDisplay>().Flash();
+                if (mainLight.intensity <= 0.95f) mainLight.intensity += 0.05f;
             } else {
                 Instantiate(explosionPrefab, hitData.collider.gameObject.transform.position, Quaternion.identity);
                 Destroy(hitData.collider.gameObject);
@@ -163,6 +168,7 @@ public class InputManager : MonoBehaviour
                 if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
                 }
+                if (Time.timeSinceLevelLoad > 20 && mainLight.intensity > 0.2f) mainLight.intensity -= 0.05f;
             }
         }
         
@@ -194,6 +200,7 @@ public class InputManager : MonoBehaviour
                 if (ghostRect.sizeDelta.x < ghostMaxDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width + 15.0f, ghostRect.rect.height + 15.0f);
                 }
+                if (mainLight.intensity <= 0.95f) mainLight.intensity += 0.05f;
                 numSpared += 1;
                 scoreDisplay.GetComponent<ScoreDisplay>().Flash();
             } else {
@@ -204,6 +211,7 @@ public class InputManager : MonoBehaviour
                 if (ghostRect.sizeDelta.x > ghostMinDelta.x) {
                     ghostRect.sizeDelta = new Vector2(ghostRect.rect.width - 15.0f, ghostRect.rect.height - 15.0f);
                 }
+                if (Time.timeSinceLevelLoad > 20 && mainLight.intensity > 0.2f) mainLight.intensity -= 0.05f;
             }
         }
     }
@@ -254,6 +262,7 @@ public class InputManager : MonoBehaviour
         timeLeft += Time.deltaTime;
         // update ghostie
         ghost.transform.position = Vector3.Lerp(ghostStart, new Vector3(Screen.width, ghostStart.y), Time.timeSinceLevelLoad / 50.0f);
+        bgMusic.volume = Mathf.Lerp(0.4f, 1.0f, Time.timeSinceLevelLoad / 50.0f);
         //Debug.Log("NUM SPARED: " + numSpared);
         // slider.value = numSpared/30.0f;
         // slider.value = timeLeft/50.0f;

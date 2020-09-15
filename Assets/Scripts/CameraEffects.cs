@@ -29,18 +29,18 @@ public class CameraEffects : MonoBehaviour {
 
 	void Update()
 	{
-        if (enabled) {
-            if (shakeDuration > 0)
-            {
-                camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
+        //if (enabled) {
+        //    if (shakeDuration > 0)
+        //    {
+        //        camTransform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
                 
-                shakeDuration -= Time.deltaTime * decreaseFactor;
-            }
-            else
-            {
-                shakeDuration = 0f;
-                camTransform.localPosition = originalPos;
-            }
-        }
+        //        shakeDuration -= Time.deltaTime * decreaseFactor;
+        //    }
+        //    else
+        //    {
+        //        shakeDuration = 0f;
+        //        camTransform.localPosition = originalPos;
+        //    }
+        //}
 	}
 }
