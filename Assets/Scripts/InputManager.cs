@@ -37,6 +37,7 @@ public class InputManager : MonoBehaviour
     private AudioSource audioSource;
     private float[] pitches = {1.0f,0.4f,0.5f,0.8f,0.7f};
 
+    CameraEffects cameraEffects;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +54,7 @@ public class InputManager : MonoBehaviour
         ghostBG.SetActive(true);
         timeLeft = 0;
         numSpared = 0;
+        cameraEffects = Camera.main.GetComponent<CameraEffects>();
     }
 
     void MoveCamera()
@@ -72,6 +74,8 @@ public class InputManager : MonoBehaviour
 
     IEnumerator PunchAnim()
     {
+        cameraEffects.enabled = true;
+        cameraEffects.shakeDuration = 0.3f;
         isPunching = true;
         float timer = 0.0f;
         Vector3 target;
@@ -91,6 +95,7 @@ public class InputManager : MonoBehaviour
             yield return null;
         }
         hand.GetComponent<MeshRenderer>().enabled = false;
+        cameraEffects.enabled = false;
         isPunching = false;
     }
 

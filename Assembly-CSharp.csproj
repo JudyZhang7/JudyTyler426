@@ -43,6 +43,7 @@
      <Compile Include="Assets\Scripts\CorridorMove.cs" />
      <Compile Include="Assets\Scripts\EnemySpawner.cs" />
      <Compile Include="Assets\Scripts\EndScreen.cs" />
+     <Compile Include="Assets\Scripts\CameraEffects.cs" />
      <None Include="Assets\SimpleSky\ReadMe.txt" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/Unity/Hub/Editor/2020.1.3f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
